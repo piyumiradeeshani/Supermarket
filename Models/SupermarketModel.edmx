@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SupermarketModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CatId" />
+          </Key>
+          <Property Name="CatId" Type="int" Nullable="false" />
+          <Property Name="CatName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CategoryManager">
+          <Key>
+            <PropertyRef Name="ManagerId" />
+            <PropertyRef Name="CatergoryId" />
+          </Key>
+          <Property Name="ManagerId" Type="int" Nullable="false" />
+          <Property Name="CatergoryId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Manager">
+          <Key>
+            <PropertyRef Name="ManId" />
+          </Key>
+          <Property Name="ManId" Type="int" Nullable="false" />
+          <Property Name="ManName" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProId" />
+          </Key>
+          <Property Name="ProId" Type="int" Nullable="false" />
+          <Property Name="FK_CatId" Type="int" />
+          <Property Name="ProName" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK__CategoryM__Cater__182C9B23">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="CategoryManager" Type="Self.CategoryManager" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CatId" />
+            </Principal>
+            <Dependent Role="CategoryManager">
+              <PropertyRef Name="CatergoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CategoryM__Manag__173876EA">
+          <End Role="Manager" Type="Self.Manager" Multiplicity="1" />
+          <End Role="CategoryManager" Type="Self.CategoryManager" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manager">
+              <PropertyRef Name="ManId" />
+            </Principal>
+            <Dependent Role="CategoryManager">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Product__FK_CatI__1273C1CD">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CatId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="FK_CatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SupermarketModelStoreContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CategoryManager" EntityType="Self.CategoryManager" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Manager" EntityType="Self.Manager" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__CategoryM__Cater__182C9B23" Association="Self.FK__CategoryM__Cater__182C9B23">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="CategoryManager" EntitySet="CategoryManager" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CategoryM__Manag__173876EA" Association="Self.FK__CategoryM__Manag__173876EA">
+            <End Role="Manager" EntitySet="Manager" />
+            <End Role="CategoryManager" EntitySet="CategoryManager" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Product__FK_CatI__1273C1CD" Association="Self.FK__Product__FK_CatI__1273C1CD">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SupermarketModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CatId" />
+          </Key>
+          <Property Name="CatId" Type="Int32" Nullable="false" />
+          <Property Name="CatName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Product__FK_CatI__1273C1CD" FromRole="Category" ToRole="Product" />
+          <NavigationProperty Name="Managers" Relationship="Self.CategoryManager" FromRole="Category" ToRole="Manager" />
+        </EntityType>
+        <EntityType Name="Manager">
+          <Key>
+            <PropertyRef Name="ManId" />
+          </Key>
+          <Property Name="ManId" Type="Int32" Nullable="false" />
+          <Property Name="ManName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Categories" Relationship="Self.CategoryManager" FromRole="Manager" ToRole="Category" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProId" />
+          </Key>
+          <Property Name="ProId" Type="Int32" Nullable="false" />
+          <Property Name="FK_CatId" Type="Int32" />
+          <Property Name="ProName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Category" Relationship="Self.FK__Product__FK_CatI__1273C1CD" FromRole="Product" ToRole="Category" />
+        </EntityType>
+        <Association Name="FK__Product__FK_CatI__1273C1CD">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CatId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="FK_CatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CategoryManager">
+          <End Role="Category" Type="Self.Category" Multiplicity="*" />
+          <End Role="Manager" Type="Self.Manager" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="SupermarketEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Managers" EntityType="Self.Manager" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <AssociationSet Name="FK__Product__FK_CatI__1273C1CD" Association="Self.FK__Product__FK_CatI__1273C1CD">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="CategoryManager" Association="Self.CategoryManager">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Manager" EntitySet="Managers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SupermarketModelStoreContainer" CdmEntityContainer="SupermarketEntities">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="SupermarketModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="CatId" ColumnName="CatId" />
+                <ScalarProperty Name="CatName" ColumnName="CatName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Managers">
+            <EntityTypeMapping TypeName="SupermarketModel.Manager">
+              <MappingFragment StoreEntitySet="Manager">
+                <ScalarProperty Name="ManId" ColumnName="ManId" />
+                <ScalarProperty Name="ManName" ColumnName="ManName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="SupermarketModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ProId" ColumnName="ProId" />
+                <ScalarProperty Name="FK_CatId" ColumnName="FK_CatId" />
+                <ScalarProperty Name="ProName" ColumnName="ProName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="CategoryManager" TypeName="SupermarketModel.CategoryManager" StoreEntitySet="CategoryManager">
+            <EndProperty Name="Category">
+              <ScalarProperty Name="CatId" ColumnName="CatergoryId" />
+            </EndProperty>
+            <EndProperty Name="Manager">
+              <ScalarProperty Name="ManId" ColumnName="ManagerId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
